@@ -1,2 +1,2 @@
 # dfbingo
-Twitter bot
+Follow me: @dfbingo
