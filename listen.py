@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# Loading here as otherwise these are reloaded on each call
 import tweepy
 import libxc
 import string
@@ -46,14 +47,14 @@ def process_tweet(api, tweet, me):
 
     return
 
-def check_mentions(api, since_id, startup=False):
+def check_mentions(api, since_id, startup=False, debug=False):
     new_since_id = since_id
     me = api.me()
     for tweet in tweepy.Cursor(api.mentions_timeline, since_id=since_id, tweet_mode="extended").items():
         new_since_id = max(tweet.id, new_since_id)
 
         # Debug statement
-        if False:
+        if debug:
             print(tweet.id, tweet.full_text)
 
         # On startup, just workout the most recent Tweet ID; if running, process the tweet.
@@ -61,23 +62,3 @@ def check_mentions(api, since_id, startup=False):
             process_tweet(api, tweet, me)
     return new_since_id
 
-# Run main
-
-# Key import copied from https://dototot.com/reply-tweets-python-tweepy-twitter-bot/
-from keys import keys
-
-# Set up OAuth and integrate with API
-auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
-auth.set_access_token(keys['access_token'], keys['access_token_secret'])
-api = tweepy.API(auth)
-
-# Give an initial starting point
-since_id = check_mentions(api, 1, True)
-
-import time
-while True:
-    time.sleep(300)
-    try:
-        since_id = check_mentions(api, since_id)
-    except tweepy.TweepError:
-        pass
