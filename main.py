@@ -27,6 +27,7 @@ def main():
         import libxc
         tweet_text = libxc.get_random_functional()
 
+        # If debugging, print the tweet. Otherwise, send to Twitter
         if args.test:
             print(tweet_text)
         else:
@@ -39,13 +40,15 @@ def main():
         # Give an initial starting point
         since_id = check_mentions(api, 1, True, args.test)
 
-        import time
-        while True:
-            time.sleep(300)
-            try:
-                since_id = check_mentions(api, since_id, debug=args.test)
-            except tweepy.TweepError:
-                pass 
+        # Only enter the loop if not debugging
+        if not args.test:
+            import time
+            while True:
+                time.sleep(300)
+                try:
+                    since_id = check_mentions(api, since_id)
+                except tweepy.TweepError:
+                    pass 
 
 if __name__ == "__main__":
     main()
