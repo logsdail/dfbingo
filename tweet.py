@@ -13,7 +13,7 @@ api = tweepy.API(auth)
 # Write a tweet to push to our Twitter account
 tweet_text = libxc.get_random_functional()
 
-debug = True
+debug = False 
 if debug:
     print(tweet_text)
 else:
