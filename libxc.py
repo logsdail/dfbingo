@@ -44,6 +44,20 @@ def get_functional_family(value):
         return "Hybrid MGGA"
     return "unknown"
 
+#def get_functional_hybrid_type(value):
+#    ''' 
+#    Function to translate integer value into string for hybrid type
+#
+#    Parameters:
+#    value: Integer
+#    '''
+#    from pylibxc import flags
+#
+#    if value is flags.XC_HYB_NONE:
+#        return ""
+#    else:
+#        return "Hybrid "
+
 def get_citations(dois):
     '''
     Function that translates a list of DOIs into a citation count
@@ -96,6 +110,7 @@ def get_functional_information(func_name):
     # Interaction with libxc taken from this page: https://www.tddft.org/programs/libxc/installation/#python-library
     func = LibXCFunctional(func_name, "unpolarized")
     func_textname = func.get_name()
+    #func_kind = get_functional_hybrid_type(func._hyb_type) + get_functional_kind(func.get_kind())
     func_kind = get_functional_kind(func.get_kind())
     func_family = get_functional_family(func.get_family())
     information = func_textname + ", which is " + func_kind + " functional from the " + func_family + " family" 

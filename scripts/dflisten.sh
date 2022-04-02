@@ -1,5 +1,5 @@
 #!/bin/bash
 #
-export PYTHONPATH="/home/andrew/Software/libxc-4.3.4/lib/python3.7/site-packages:$PYTHONPATH"
+export PYTHONPATH="/home/andrew/Software/libxc-5.1.3:$PYTHONPATH"
 
-python3 /home/andrew/Documents/github/dfbingo/main.py --listen
+python3 /home/andrew/Software/github/dfbingo/main.py --listen 
