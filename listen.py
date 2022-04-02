@@ -50,7 +50,6 @@ def process_tweet(api, tweet, me):
 def check_mentions(api, since_id, startup=False, debug=False):
     new_since_id = since_id
     me = api.get_user(screen_name="dfbingo").id
-    print(me)
     for tweet in tweepy.Cursor(api.mentions_timeline, since_id=since_id, tweet_mode="extended").items():
         new_since_id = max(tweet.id, new_since_id)
 
