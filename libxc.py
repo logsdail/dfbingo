@@ -163,7 +163,7 @@ def get_random_functional():
         from bingo import calls
         #print(func_id)
         if calls.get(str(func_id % 100)):
-            output += calls.get(str(func_id % 100)) + "; "
+            output += calls.get(str(func_id % 100)) + ", " + str(func_id % 100) + "; "
     
     output += "Today's functional is "  
     output += information
