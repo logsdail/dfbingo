@@ -36,12 +36,14 @@ def get_functional_family(value):
         return "LDA"
     elif value is flags.XC_FAMILY_GGA:
         return "GGA"
-    #elif value is flags.XC_FAMILY_HYB_GGA:
-    #    return "Hybrid GGA"
     elif value is flags.XC_FAMILY_MGGA:
         return "MGGA"
-    #elif value is flags.XC_FAMILY_HYB_MGGA:
-    #    return "Hybrid MGGA"
+    elif value is flags.XC_FAMILY_HYB_LDA: 
+        return "Hybrid LDA"
+    elif value is flags.XC_FAMILY_HYB_GGA:
+        return "Hybrid GGA"
+    elif value is flags.XC_FAMILY_HYB_MGGA:
+        return "Hybrid MGGA"
     return "unknown"
 
 #def get_functional_hybrid_type(value):
