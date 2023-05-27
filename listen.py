@@ -6,10 +6,11 @@ import libxc
 import string
 
 ## Adapted from: https://realpython.com/twitter-bot-python-tweepy
-def process_tweet(api, tweet, me):
+def process_tweet(Client, tweet, me):
     ## Ignore message if a reply, if already retweeted or if sent by me
-    if tweet.in_reply_to_status_id is not None or \
-       tweet.retweeted or tweet.user.id == me.id:
+    if tweet.in_reply_to_user_id is not None or \
+       tweet.referenced_tweets.id is not None or \
+       tweet.author_id == me.id:
         return
 
     # Break the tweet up in to lower case, depunctuated words
@@ -20,7 +21,7 @@ def process_tweet(api, tweet, me):
         # Retweet, since we have not retweeted it yet
         try:
             #print("Retweeting: ", tweet.full_text)
-            tweet.retweet()
+            Client.retweet(tweet_id=tweet.id)
         except:
             # Error, carry on working
             pass
@@ -35,11 +36,12 @@ def process_tweet(api, tweet, me):
 
     else: # Not retweeting
         # Reply to message
-        tweet_text = "@" + tweet.user.screen_name + " " + libxc.search_functional_information(incoming_words)
+        print(dir(tweet.user))
+        tweet_text = "@" + Client.get_user(id=tweet.author_id) + " " + libxc.search_functional_information(incoming_words)
         try:
             #print("Replying: ", tweet_text)
-            api.update_status(status=tweet_text,
-                              in_reply_to_status_id=tweet.id,
+            Client.create_tweet(text=tweet_text,
+                                in_reply_to_tweet_id=tweet.id,
                              )
         except:
             # Error, carry on working
@@ -47,10 +49,10 @@ def process_tweet(api, tweet, me):
 
     return
 
-def check_mentions(api, since_id, startup=False, debug=False):
+def check_mentions(Client, since_id, startup=False, debug=False):
     new_since_id = since_id
-    me = api.get_user(screen_name="dfbingo").id
-    for tweet in tweepy.Cursor(api.mentions_timeline, since_id=since_id, tweet_mode="extended").items():
+    me = Client.get_user(username="dfbingo").id
+    for tweet in tweepy.Paginator(Client.get_users_mentions(id=me, since_id=since_id, tweet_fields=list('in_reply_to_user_id', 'author_id', 'referenced_tweets.id'))).items():
         new_since_id = max(tweet.id, new_since_id)
 
         # Debug statement
@@ -59,6 +61,6 @@ def check_mentions(api, since_id, startup=False, debug=False):
 
         # On startup, just workout the most recent Tweet ID; if running, process the tweet.
         if not startup:
-            process_tweet(api, tweet, me)
+            process_tweet(Client, tweet, me)
     return new_since_id
 
